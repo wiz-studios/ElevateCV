@@ -45,70 +45,75 @@ function cosineSimilarity(a: number[], b: number[]): number {
 }
 
 export async function findSimilarBullets(resume: Resume, job: Job): Promise<BulletSimilarityMatch[]> {
-  const responsibilities = (job.responsibilities || [])
-    .map((resp) => resp.trim())
-    .filter((resp) => resp.length > 10)
-    .slice(0, MAX_RESPONSIBILITIES)
+  try {
+    const responsibilities = (job.responsibilities || [])
+      .map((resp) => resp.trim())
+      .filter((resp) => resp.length > 10)
+      .slice(0, MAX_RESPONSIBILITIES)
 
-  if (responsibilities.length === 0) {
-    return []
-  }
+    if (responsibilities.length === 0) {
+      return []
+    }
 
-  const bulletPool = resume.bullets
-    .map((bullet) => ({
-      ...bullet,
-      text: (bullet.tailored_text || bullet.raw_text || "").trim(),
-    }))
-    .filter((bullet) => bullet.text.length > 10)
-    .slice(0, MAX_BULLETS)
+    const bulletPool = resume.bullets
+      .map((bullet) => ({
+        ...bullet,
+        text: (bullet.tailored_text || bullet.raw_text || "").trim(),
+      }))
+      .filter((bullet) => bullet.text.length > 10)
+      .slice(0, MAX_BULLETS)
 
-  if (bulletPool.length === 0) {
-    return []
-  }
+    if (bulletPool.length === 0) {
+      return []
+    }
 
-  const bulletEmbeddings = await Promise.all(
-    bulletPool.map(async (bullet) => ({
-      bullet,
-      embedding: await generateEmbedding(bullet.text),
-    })),
-  )
+    const bulletEmbeddings = await Promise.all(
+      bulletPool.map(async (bullet) => ({
+        bullet,
+        embedding: await generateEmbedding(bullet.text),
+      })),
+    )
 
-  const responsibilityEmbeddings = await Promise.all(
-    responsibilities.map(async (responsibility) => ({
-      responsibility,
-      embedding: await generateEmbedding(responsibility),
-    })),
-  )
+    const responsibilityEmbeddings = await Promise.all(
+      responsibilities.map(async (responsibility) => ({
+        responsibility,
+        embedding: await generateEmbedding(responsibility),
+      })),
+    )
 
-  const matches: BulletSimilarityMatch[] = []
+    const matches: BulletSimilarityMatch[] = []
 
-  for (const responsibility of responsibilityEmbeddings) {
-    if (!responsibility.embedding) continue
+    for (const responsibility of responsibilityEmbeddings) {
+      if (!responsibility.embedding) continue
 
-    let bestMatch: { bullet: typeof bulletPool[number]; similarity: number } | null = null
+      let bestMatch: { bullet: typeof bulletPool[number]; similarity: number } | null = null
 
-    for (const bullet of bulletEmbeddings) {
-      if (!bullet.embedding) continue
+      for (const bullet of bulletEmbeddings) {
+        if (!bullet.embedding) continue
 
-      const similarity = cosineSimilarity(responsibility.embedding, bullet.embedding)
-      if (!bestMatch || similarity > bestMatch.similarity) {
-        bestMatch = { bullet: bullet.bullet, similarity }
+        const similarity = cosineSimilarity(responsibility.embedding, bullet.embedding)
+        if (!bestMatch || similarity > bestMatch.similarity) {
+          bestMatch = { bullet: bullet.bullet, similarity }
+        }
+      }
+
+      if (bestMatch && bestMatch.similarity >= MIN_SIMILARITY) {
+        matches.push({
+          responsibility: responsibility.responsibility,
+          bullet_id: bestMatch.bullet.id,
+          bullet_text: bestMatch.bullet.text,
+          similarity: Number(bestMatch.similarity.toFixed(2)),
+          section: bestMatch.bullet.section,
+          company: bestMatch.bullet.company,
+        })
       }
     }
 
-    if (bestMatch && bestMatch.similarity >= MIN_SIMILARITY) {
-      matches.push({
-        responsibility: responsibility.responsibility,
-        bullet_id: bestMatch.bullet.id,
-        bullet_text: bestMatch.bullet.text,
-        similarity: Number(bestMatch.similarity.toFixed(2)),
-        section: bestMatch.bullet.section,
-        company: bestMatch.bullet.company,
-      })
-    }
+    return matches.sort((a, b) => b.similarity - a.similarity)
+  } catch (error) {
+    console.warn("[Embeddings] findSimilarBullets error, returning empty results:", error)
+    return []
   }
-
-  return matches.sort((a, b) => b.similarity - a.similarity)
 }
 
 

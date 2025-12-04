@@ -86,6 +86,12 @@ export async function POST(request: NextRequest) {
         ? await tailorResume(body.resume, body.job, style)
         : tailorResumeStub(body.resume, body.job, style)
 
+      console.log("[API] Tailor result:", {
+        matchScore: result.match_score,
+        bulletCount: result.resume.bullets.length,
+        missingSkillsCount: result.missing_skills.length,
+      })
+
       logAuditEvent("ai.tailor_success", {
         userId: isAuthenticated ? userId : null,
         metadata: {
@@ -95,12 +101,23 @@ export async function POST(request: NextRequest) {
         },
       })
     } catch (aiError) {
-      logAuditEvent("ai.tailor_failed", {
-        userId: isAuthenticated ? userId : null,
-        success: false,
-        errorMessage: aiError instanceof Error ? aiError.message : "Unknown AI error",
-      })
-      throw aiError
+      // Fallback to stub if AI fails
+      console.warn("[API] AI tailoring failed, falling back to stub:", aiError)
+      try {
+        result = tailorResumeStub(body.resume, body.job, style)
+        console.log("[API] Stub tailor succeeded:", {
+          matchScore: result.match_score,
+          bulletCount: result.resume.bullets.length,
+        })
+      } catch (stubError) {
+        console.error("[API] Stub tailoring also failed:", stubError)
+        logAuditEvent("ai.tailor_failed", {
+          userId: isAuthenticated ? userId : null,
+          success: false,
+          errorMessage: stubError instanceof Error ? stubError.message : "Stub tailoring failed",
+        })
+        throw stubError
+      }
     }
 
     let similarBullets: BulletSimilarityMatch[] = []
@@ -112,15 +129,35 @@ export async function POST(request: NextRequest) {
 
     // Consume quota for authenticated users
     if (isAuthenticated) {
-      await consumeQuota(userId)
+      try {
+        await consumeQuota(userId)
+      } catch (quotaError) {
+        console.warn("[API] Quota consumption failed (non-critical):", quotaError)
+      }
     }
 
     // Get remaining quota for response
-    const billing = await getBillingUsage(userId)
-    const remainingQuota =
-      billing.monthly_quota === -1
-        ? -1
-        : Math.max(0, billing.monthly_quota - billing.monthly_used) + billing.credits_remaining
+    let remainingQuota = -1
+    try {
+      const billing = await getBillingUsage(userId)
+      remainingQuota =
+        billing.monthly_quota === -1
+          ? -1
+          : Math.max(0, billing.monthly_quota - billing.monthly_used) + billing.credits_remaining
+    } catch (billingError) {
+      console.warn("[API] Billing check failed (non-critical):", billingError)
+      // Default to unlimited if billing fails
+      remainingQuota = -1
+    }
+
+    console.log("[API] Sending tailor response:", {
+      success: true,
+      matchScore: result.match_score,
+      bulletCount: result.resume.bullets.length,
+      missingSkillsCount: result.missing_skills.length,
+      similarBulletsCount: similarBullets.length,
+      remainingQuota,
+    })
 
     return NextResponse.json<TailorResponse>({
       success: true,
@@ -132,6 +169,7 @@ export async function POST(request: NextRequest) {
     })
   } catch (error) {
     console.error("[API] Tailor error:", error)
-    return NextResponse.json<TailorResponse>({ success: false, error: "Failed to tailor resume" }, { status: 500 })
+    const errorMessage = error instanceof Error ? error.message : "Unknown error"
+    return NextResponse.json<TailorResponse>({ success: false, error: `Failed to tailor resume: ${errorMessage}` }, { status: 500 })
   }
 }

@@ -107,6 +107,18 @@ export async function getOrCreateUser(userId: string, email?: string): Promise<U
     return profileToUser(profile)
   }
 
+  // For demo users, return a default user object without creating in DB
+  if (userId.startsWith("demo_")) {
+    return {
+      id: userId,
+      email: email || `${userId}@demo.local`,
+      plan: "free",
+      credits: 0,
+      subscription_status: null,
+      subscription_expiry: null,
+    }
+  }
+
   // Create new user if doesn't exist (shouldn't happen with trigger, but fallback)
   if (!email) {
     throw new Error("Email required to create user")

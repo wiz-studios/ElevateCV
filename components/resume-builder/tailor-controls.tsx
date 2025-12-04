@@ -47,6 +47,13 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
 
       const result = await response.json()
 
+      console.log("[TailorControls] API Response:", {
+        status: response.status,
+        success: result.success,
+        hasData: !!result.data,
+        error: result.error,
+      })
+
       if (response.status === 402) {
         setQuotaExceeded(true)
         setQuotaError(result.error || "Quota exceeded")
@@ -55,8 +62,10 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
       }
 
       if (result.success && result.data) {
+        console.log("[TailorControls] Calling onTailored with data")
         onTailored(result.data)
       } else {
+        console.error("[TailorControls] Invalid response:", result)
         setError(result.error || "Failed to tailor resume")
       }
     } catch (err) {

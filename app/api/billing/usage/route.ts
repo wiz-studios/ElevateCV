@@ -12,10 +12,7 @@ export async function GET(request: Request) {
     // Get user ID from header or query param
     // In production, get from authenticated session
     const { searchParams } = new URL(request.url)
-    const userId = searchParams.get("user_id") || request.headers.get("x-user-id") || "demo_user"
-
-    // Ensure user exists
-    getOrCreateUser(userId)
+    const userId = searchParams.get("user_id") || request.headers.get("x-user-id") || `demo_${Date.now()}`
 
     const usage = await getBillingUsage(userId)
 

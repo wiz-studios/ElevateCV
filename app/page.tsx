@@ -123,26 +123,7 @@ export default function ResumeBuildPage() {
       </header>
 
       <main className="container mx-auto px-4 py-8 space-y-8">
-        {/* Welcome Banner (Unauthenticated) */}
-        {!isAuthenticated && (
-          <div className="bg-gradient-to-r from-primary/10 via-primary/5 to-background border rounded-xl p-6 text-center relative overflow-hidden">
-            <div className="absolute top-0 right-0 p-12 bg-primary/5 rounded-full blur-3xl -mr-12 -mt-12" />
-            <div className="absolute bottom-0 left-0 p-12 bg-blue-500/5 rounded-full blur-3xl -ml-12 -mb-12" />
 
-            <h2 className="text-2xl font-bold mb-2 relative z-10">Welcome to ElevateCV</h2>
-            <p className="text-muted-foreground mb-6 max-w-lg mx-auto relative z-10">
-              Sign in to save your resumes, track your applications, and get 3 free AI tailors every month.
-            </p>
-            <div className="flex items-center justify-center gap-3 relative z-10">
-              <Button variant="outline" size="lg" asChild className="bg-background/50 backdrop-blur-sm">
-                <Link href="/login">Sign in</Link>
-              </Button>
-              <Button size="lg" asChild className="shadow-lg shadow-primary/20">
-                <Link href="/signup">Create Free Account</Link>
-              </Button>
-            </div>
-          </div>
-        )}
 
         <div className="grid lg:grid-cols-12 gap-8 items-start">
           {/* Left Column: Builder Controls (5 cols) */}

@@ -151,19 +151,36 @@ export function tailorResumeStub(resume: Resume, job: Job, style: TailoringStyle
   const missingSkills = getMissingSkills(resume, job)
 
   // Create tailored bullets (stub: add job title reference)
-  const tailoredBullets = resume.bullets.map((bullet) => ({
-    ...bullet,
-    tailored_text:
+  const tailoredBullets = resume.bullets.map((bullet) => {
+    const tailoredText =
       style === "concise"
         ? bullet.raw_text.substring(0, 100) + (bullet.raw_text.length > 100 ? "..." : "")
-        : bullet.raw_text,
-    suggested_metric:
-      bullet.metric_value === undefined ? "Consider adding: X% improvement or Y users impacted" : undefined,
-  }))
+        : bullet.raw_text
+
+    return {
+      id: bullet.id,
+      section: bullet.section,
+      company: bullet.company,
+      start_date: bullet.start_date,
+      end_date: bullet.end_date,
+      raw_text: bullet.raw_text,
+      action: bullet.action,
+      impact: bullet.impact,
+      metric_value: bullet.metric_value,
+      metric_unit: bullet.metric_unit,
+      tailored_text: tailoredText,
+      suggested_metric: bullet.metric_value === undefined ? "Consider adding: X% improvement or Y users impacted" : undefined,
+    }
+  })
 
   return {
     resume: {
-      ...resume,
+      name: resume.name,
+      email: resume.email,
+      phone: resume.phone,
+      summary: resume.summary,
+      sections: resume.sections,
+      skills: resume.skills,
       bullets: tailoredBullets,
     },
     match_score: Math.round(matchScore * 100) / 100,
