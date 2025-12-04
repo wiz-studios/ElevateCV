@@ -1,0 +1,6 @@
+{
+  "user_id": "user_abc123",
+  "type": "subscription",
+  "plan": "premium",
+  "billing_period": "yearly"
+}

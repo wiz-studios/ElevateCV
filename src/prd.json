@@ -1,0 +1,72 @@
+{
+  "product": "AI Resume Builder MVP",
+  "version": "1.0.0",
+  "phases": {
+    "phase_0": {
+      "name": "PRD & Planning",
+      "status": "complete",
+      "deliverables": [
+        "Project structure definition",
+        "TypeScript type definitions",
+        "API endpoint specifications",
+        "Success metrics identification"
+      ]
+    },
+    "phase_1": {
+      "name": "Minimal Working Backend",
+      "status": "complete",
+      "deliverables": [
+        "Resume parser (regex-based)",
+        "Job description parser",
+        "AI tailoring stub",
+        "PDF/HTML renderer",
+        "ATS scoring algorithm",
+        "Frontend UI components"
+      ]
+    },
+    "phase_2": {
+      "name": "Enhanced AI & Embeddings",
+      "status": "planned",
+      "deliverables": [
+        "Embedding-based bullet similarity",
+        "AI-enhanced parsing",
+        "Industry benchmark ATS scores",
+        "Resume template system"
+      ]
+    },
+    "phase_3": {
+      "name": "Production Ready",
+      "status": "planned",
+      "deliverables": [
+        "Full AI tailoring pipeline",
+        "DOCX upload support",
+        "Puppeteer PDF generation",
+        "User accounts & history"
+      ]
+    }
+  },
+  "success_metrics": {
+    "user_engagement": {
+      "metric": "resume_completions",
+      "target": "80% of users complete tailoring flow"
+    },
+    "ai_quality": {
+      "metric": "match_score_improvement",
+      "target": "Average 20% improvement in match score after tailoring"
+    },
+    "ats_compatibility": {
+      "metric": "ats_score",
+      "target": "90% of tailored resumes score 70+ on ATS check"
+    },
+    "export_rate": {
+      "metric": "pdf_downloads",
+      "target": "60% of completed resumes exported as PDF"
+    }
+  },
+  "technical_requirements": {
+    "backend": "Next.js API Routes (TypeScript)",
+    "frontend": "React with shadcn/ui",
+    "ai": "Vercel AI SDK with AI Gateway",
+    "types": "Strict TypeScript with Zod validation"
+  }
+}

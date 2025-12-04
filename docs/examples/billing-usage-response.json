@@ -1,0 +1,15 @@
+{
+  "success": true,
+  "data": {
+    "user_id": "demo_user",
+    "plan": "free",
+    "plan_name": "Free",
+    "credits_remaining": 0,
+    "monthly_quota": 3,
+    "monthly_used": 2,
+    "quota_reset_date": "2025-01-01T00:00:00.000Z",
+    "subscription_status": null,
+    "subscription_expiry": null,
+    "features": ["3 AI-tailored resumes per month", "Basic ATS scoring", "PDF export", "Standard templates"]
+  }
+}
