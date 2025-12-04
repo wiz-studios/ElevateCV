@@ -17,7 +17,7 @@ export async function GET(request: Request) {
     // Ensure user exists
     getOrCreateUser(userId)
 
-    const usage = getBillingUsage(userId)
+    const usage = await getBillingUsage(userId)
 
     return NextResponse.json<BillingUsageResponse>({
       success: true,

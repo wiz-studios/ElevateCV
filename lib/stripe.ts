@@ -1,10 +1,12 @@
 import Stripe from "stripe"
 
 // Initialize Stripe with secret key
-export const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
-  apiVersion: "2025-05-28.basil",
+// Note: STRIPE_SECRET_KEY can be empty during build time, actual initialization happens at runtime
+const stripeKey = process.env.STRIPE_SECRET_KEY || ""
+export const stripe = stripeKey ? new Stripe(stripeKey, {
+  apiVersion: "2025-11-17.clover",
   typescript: true,
-})
+}) : (null as any)
 
 // Product IDs for Stripe (configure these in your Stripe dashboard)
 export const STRIPE_PRODUCTS = {

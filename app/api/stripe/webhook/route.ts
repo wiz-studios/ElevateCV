@@ -9,6 +9,12 @@ import type Stripe from "stripe"
 const webhookSecret = process.env.STRIPE_WEBHOOK_SECRET!
 
 export async function POST(request: NextRequest) {
+  // Guard: ensure stripe is initialized
+  if (!stripe) {
+    console.error("[Stripe Webhook] Stripe not initialized - missing STRIPE_SECRET_KEY")
+    return NextResponse.json({ error: "Stripe not configured" }, { status: 500 })
+  }
+
   const body = await request.text()
   const signature = request.headers.get("stripe-signature")!
 
@@ -36,9 +42,9 @@ export async function POST(request: NextRequest) {
           // Handle subscription purchase
           const subscriptionId = session.subscription as string
           const subscription = await stripe.subscriptions.retrieve(subscriptionId)
-          const expiryDate = new Date(subscription.current_period_end * 1000).toISOString()
+          const expiryDate = new Date((subscription as any).current_period_end * 1000).toISOString()
 
-          updateUserPlan(userId, plan as PlanType, expiryDate)
+          await updateUserPlan(userId, plan as PlanType, expiryDate)
 
           logAuditEvent("billing.subscription_created", {
             userId,
@@ -54,7 +60,7 @@ export async function POST(request: NextRequest) {
         } else if (type === "credits" && credits) {
           // Handle credit purchase
           const creditAmount = Number.parseInt(credits, 10)
-          addCredits(userId, creditAmount)
+          await addCredits(userId, creditAmount)
 
           logAuditEvent("billing.credits_purchased", {
             userId,

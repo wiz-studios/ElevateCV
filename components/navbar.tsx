@@ -43,7 +43,7 @@ export function Navbar() {
           {/* Usage display (desktop) */}
           {user && (
             <div className="hidden md:block">
-              <UsageDisplay variant="compact" />
+              <UsageDisplay compact />
             </div>
           )}
 
@@ -98,7 +98,7 @@ export function Navbar() {
                   Billing
                 </Link>
                 <div className="py-2">
-                  <UsageDisplay variant="compact" />
+                  <UsageDisplay compact />
                 </div>
               </>
             )}
