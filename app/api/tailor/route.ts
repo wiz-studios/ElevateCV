@@ -21,28 +21,16 @@ export async function POST(request: NextRequest) {
 
     const authResult = await protectedTailorMiddleware(request)
 
-    // If auth fails, allow demo mode for unauthenticated users
-    let userId = "demo_user"
-    let isAuthenticated = false
-
+    // Require authentication - no demo mode for tailoring
     if ("error" in authResult) {
-      // Check if user provided demo header or is unauthenticated
-      const demoMode = request.headers.get("x-demo-mode") === "true"
-      if (!demoMode) {
-        // For unauthenticated users, use optional auth
-        const optionalUser = await optionalAuthMiddleware(request)
-        if (!optionalUser) {
-          // Allow limited demo access
-          userId = `demo_${Date.now()}`
-        } else {
-          userId = optionalUser.id
-          isAuthenticated = true
-        }
-      }
-    } else {
-      userId = authResult.user.id
-      isAuthenticated = true
+      return NextResponse.json<TailorResponse>(
+        { success: false, error: "Authentication required. Please sign in to use AI tailoring." },
+        { status: 401 },
+      )
     }
+
+    const userId = authResult.user.id
+    const isAuthenticated = true
 
     // Validate inputs
     if (!body.resume || !validateResume(body.resume)) {

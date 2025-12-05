@@ -85,20 +85,26 @@ export default function ResumeBuildPage() {
   const displayResume = tailoredResume || resume
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-950 dark:to-slate-900">
+    <div className="min-h-screen bg-background">
       {/* Header */}
-      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md supports-[backdrop-filter]:bg-background/60">
+      <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-2 transition-opacity hover:opacity-80">
-            <div className="p-2 bg-primary/10 rounded-lg">
-              <FileText className="h-5 w-5 text-primary" />
+          <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-70">
+            <div className="p-2 bg-foreground rounded-lg">
+              <FileText className="h-5 w-5 text-background" />
             </div>
             <div>
-              <h1 className="text-xl font-bold tracking-tight">ElevateCV</h1>
+              <h1 className="text-lg font-semibold tracking-tight">ElevateCV</h1>
             </div>
           </Link>
 
           <div className="flex items-center gap-4">
+            <Link href="/how-it-works" className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors">
+              How It Works
+            </Link>
+            <Link href="/pricing" className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors">
+              Pricing
+            </Link>
             {isAuthenticated && (
               <>
                 <div className="hidden md:block">
@@ -122,12 +128,10 @@ export default function ResumeBuildPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-8 space-y-8">
-
-
-        <div className="grid lg:grid-cols-12 gap-8 items-start">
+      <main className="container mx-auto px-4 py-6 md:py-8 space-y-6 md:space-y-8">
+        <div className="grid lg:grid-cols-12 gap-6 md:gap-8 items-start">
           {/* Left Column: Builder Controls (5 cols) */}
-          <div className="lg:col-span-5 space-y-6">
+          <div className="lg:col-span-5 space-y-4 md:space-y-6">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-8 w-1 bg-primary rounded-full" />
               <h2 className="text-lg font-semibold">Builder Inputs</h2>
@@ -196,7 +200,7 @@ export default function ResumeBuildPage() {
           </div>
 
           {/* Right Column: Preview & Results (7 cols) */}
-          <div className="lg:col-span-7 space-y-6">
+          <div className="lg:col-span-7 space-y-4 md:space-y-6">
             <div className="flex items-center gap-2 mb-2">
               <div className="h-8 w-1 bg-green-500 rounded-full" />
               <h2 className="text-lg font-semibold">Live Preview</h2>
@@ -303,9 +307,10 @@ export default function ResumeBuildPage() {
           <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
             <p>© 2024 ElevateCV. All rights reserved.</p>
             <div className="flex items-center gap-6">
-              <Link href="#" className="hover:text-foreground transition-colors">Privacy</Link>
-              <Link href="#" className="hover:text-foreground transition-colors">Terms</Link>
-              <Link href="#" className="hover:text-foreground transition-colors">Support</Link>
+              <Link href="/how-it-works" className="hover:text-foreground transition-colors">How It Works</Link>
+              <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
+              <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
+              <Link href="/support" className="hover:text-foreground transition-colors">Support</Link>
             </div>
           </div>
         </div>

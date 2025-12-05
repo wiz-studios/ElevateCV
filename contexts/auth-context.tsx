@@ -98,6 +98,55 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     }
   }, [supabase])
 
+  // Define logout BEFORE auto-logout useEffect (which depends on it)
+  const logout = useCallback(async () => {
+    try {
+      await supabase.auth.signOut()
+      setState({
+        user: null,
+        billing: null,
+        isLoading: false,
+        isAuthenticated: false,
+      })
+    } catch (error) {
+      console.error("[Auth] Logout error:", error)
+    }
+  }, [supabase])
+
+  // Auto-logout after 15 minutes of inactivity
+  useEffect(() => {
+    if (!state.isAuthenticated) return
+
+    const INACTIVITY_TIMEOUT = 15 * 60 * 1000 // 15 minutes in milliseconds
+    let inactivityTimer: NodeJS.Timeout
+
+    const resetTimer = () => {
+      clearTimeout(inactivityTimer)
+      inactivityTimer = setTimeout(() => {
+        console.log("[Auth] Auto-logout due to inactivity")
+        logout()
+      }, INACTIVITY_TIMEOUT)
+    }
+
+    // Track user activity
+    const activityEvents = ['mousedown', 'keydown', 'scroll', 'touchstart', 'click']
+
+    activityEvents.forEach(event => {
+      window.addEventListener(event, resetTimer)
+    })
+
+    // Start the timer
+    resetTimer()
+
+    // Cleanup
+    return () => {
+      clearTimeout(inactivityTimer)
+      activityEvents.forEach(event => {
+        window.removeEventListener(event, resetTimer)
+      })
+    }
+  }, [state.isAuthenticated, logout])
+
   // Listen to auth state changes
   useEffect(() => {
     // Initial session check
@@ -193,20 +242,6 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     },
     [supabase, refreshUser],
   )
-
-  const logout = useCallback(async () => {
-    try {
-      await supabase.auth.signOut()
-      setState({
-        user: null,
-        billing: null,
-        isLoading: false,
-        isAuthenticated: false,
-      })
-    } catch (error) {
-      console.error("[Auth] Logout error:", error)
-    }
-  }, [supabase])
 
   return (
     <AuthContext.Provider

@@ -109,13 +109,16 @@ export async function getOrCreateUser(userId: string, email?: string): Promise<U
 
   // For demo users, return a default user object without creating in DB
   if (userId.startsWith("demo_")) {
+    const now = new Date().toISOString()
     return {
       id: userId,
       email: email || `${userId}@demo.local`,
       plan: "free",
       credits: 0,
-      subscription_status: null,
-      subscription_expiry: null,
+      subscription_status: undefined,
+      subscription_expiry: undefined,
+      created_at: now,
+      updated_at: now,
     }
   }
 
@@ -211,7 +214,14 @@ export async function deductCredits(userId: string, credits: number): Promise<bo
 
   const { error } = await supabase.from("profiles").update({ credits: newCredits }).eq("id", userId)
 
-  return !error
+  if (error) {
+    return false
+  }
+
+  // Sync credit change back to auth service
+  await syncUserFromBilling(userId, { credits: newCredits })
+
+  return true
 }
 
 // ============================================

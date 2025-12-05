@@ -100,7 +100,7 @@ export default function PricingPage() {
 
   return (
     <div className="min-h-screen bg-background">
-      <header className="border-b">
+      <header className="border-b bg-background/80 backdrop-blur-md">
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
             <Button variant="ghost" size="icon" asChild>
@@ -116,9 +116,9 @@ export default function PricingPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-12">
+      <main className="container mx-auto px-4 py-8 md:py-12">
         {/* Billing Toggle */}
-        <div className="flex items-center justify-center gap-4 mb-12">
+        <div className="flex flex-col sm:flex-row items-center justify-center gap-4 mb-8 md:mb-12">
           <Label htmlFor="billing-toggle" className={!isYearly ? "font-medium" : "text-muted-foreground"}>
             Monthly
           </Label>
@@ -132,7 +132,7 @@ export default function PricingPage() {
         </div>
 
         {/* Plan Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto mb-16">
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8 max-w-6xl mx-auto mb-12 md:mb-16">
           {PLANS.map((plan) => {
             const Icon = plan.icon
             const price = isYearly ? plan.yearlyPrice : plan.monthlyPrice
@@ -189,7 +189,7 @@ export default function PricingPage() {
             </p>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-6">
+          <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {CREDIT_PACKAGES.map((pkg) => (
               <Card key={pkg.id} className={`relative ${pkg.popular ? "border-primary" : ""}`}>
                 {pkg.popular && (

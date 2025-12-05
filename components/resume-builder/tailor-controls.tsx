@@ -1,10 +1,20 @@
 "use client"
 
 import { useState } from "react"
+import { useRouter } from "next/navigation"
+import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
-import { Wand2, Download, Loader2, FileText, AlertCircle } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog"
+import { Wand2, Download, Loader2, FileText, AlertCircle, Lock } from "lucide-react"
 import { UsageDisplay } from "@/components/billing/usage-display"
 import { UpgradeModal } from "@/components/billing/upgrade-modal"
 import { QuotaExceededBanner } from "@/components/billing/quota-exceeded-banner"
@@ -21,12 +31,15 @@ interface TailorControlsProps {
 }
 
 export function TailorControls({ resume, job, onTailored, template }: TailorControlsProps) {
+  const router = useRouter()
+  const { isAuthenticated } = useAuth()
   const [style, setStyle] = useState<TailoringStyle>("concise")
   const [isLoading, setIsLoading] = useState(false)
   const [error, setError] = useState<string | null>(null)
   const [quotaExceeded, setQuotaExceeded] = useState(false)
   const [quotaError, setQuotaError] = useState<string | null>(null)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
+  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
 
   const canTailor = resume && job
 
