@@ -14,7 +14,9 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Wand2, Download, Loader2, FileText, AlertCircle, Lock, Lightbulb } from "lucide-react"
+import { CoverLetterModal } from "@/components/features/cover-letter-modal"
+import { LinkedInModal } from "@/components/features/linkedin-modal"
+import { Wand2, Download, Loader2, FileText, AlertCircle, Lock, Lightbulb, Linkedin } from "lucide-react"
 import { UsageDisplay } from "@/components/billing/usage-display"
 import { UpgradeModal } from "@/components/billing/upgrade-modal"
 import { QuotaExceededBanner } from "@/components/billing/quota-exceeded-banner"
@@ -41,12 +43,13 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
   const [quotaExceeded, setQuotaExceeded] = useState(false)
   const [quotaError, setQuotaError] = useState<string | null>(null)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
-  const [showLoginPrompt, setShowLoginPrompt] = useState(false)
 
-  // New state for improvements
+  // New state for improvements and features
   const [showImprovements, setShowImprovements] = useState(false)
   const [improvementData, setImprovementData] = useState<ImprovementResponse | null>(null)
   const [isImproving, setIsImproving] = useState(false)
+  const [showCoverLetter, setShowCoverLetter] = useState(false)
+  const [showLinkedIn, setShowLinkedIn] = useState(false)
 
   const canTailor = resume && job
 
@@ -232,6 +235,27 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
               <Lightbulb className="h-4 w-4 mr-2" />
               Suggest Improvements
             </Button>
+
+            <div className="grid grid-cols-2 gap-2">
+              <Button
+                variant="outline"
+                onClick={() => setShowCoverLetter(true)}
+                disabled={!resume}
+                className="w-full text-xs h-9"
+              >
+                <FileText className="h-3.5 w-3.5 mr-2" />
+                Cover Letter
+              </Button>
+              <Button
+                variant="outline"
+                onClick={() => setShowLinkedIn(true)}
+                disabled={!resume}
+                className="w-full text-xs h-9"
+              >
+                <Linkedin className="h-3.5 w-3.5 mr-2" />
+                LinkedIn
+              </Button>
+            </div>
           </div>
 
           <div className="flex gap-2 pt-2 border-t mt-2">
@@ -255,6 +279,9 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
         data={improvementData}
         isLoading={isImproving}
       />
+
+      <CoverLetterModal open={showCoverLetter} onOpenChange={setShowCoverLetter} resume={resume} job={job} />
+      <LinkedInModal open={showLinkedIn} onOpenChange={setShowLinkedIn} resume={resume} job={job} />
     </>
   )
 }

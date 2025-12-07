@@ -9,18 +9,21 @@ export const metadata = {
 
 export default function LoginPage() {
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4">
-      <Link href="/" className="flex items-center gap-3 mb-12 transition-opacity hover:opacity-70">
-        <div className="p-2 bg-foreground rounded-lg">
-          <FileText className="h-7 w-7 text-background" />
-        </div>
-        <span className="text-2xl font-semibold tracking-tight">ElevateCV</span>
-      </Link>
-      <div className="w-full max-w-md">
-        <div className="text-center mb-8">
-          <h2 className="text-3xl font-semibold tracking-tight mb-2">Welcome back</h2>
-          <p className="text-muted-foreground">Sign in to your account to continue</p>
-        </div>
+    <div className="min-h-screen flex flex-col items-center justify-center bg-background p-4 relative overflow-hidden">
+      {/* Background Pattern */}
+      <div className="absolute inset-0 z-0 opacity-[0.03]" style={{
+        backgroundImage: "radial-gradient(#000 1px, transparent 1px)",
+        backgroundSize: "24px 24px"
+      }}></div>
+
+      <div className="relative z-10 w-full max-w-md flex flex-col items-center">
+        <Link href="/" className="flex items-center gap-3 mb-8 transition-transform hover:scale-105 active:scale-95">
+          <div className="p-2.5 bg-foreground rounded-xl shadow-lg">
+            <FileText className="h-6 w-6 text-background" />
+          </div>
+          <span className="text-2xl font-bold tracking-tight">ElevateCV</span>
+        </Link>
+
         <LoginForm />
       </div>
     </div>
