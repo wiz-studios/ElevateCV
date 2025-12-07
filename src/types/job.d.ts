@@ -4,6 +4,7 @@
  */
 
 export interface Job {
+  id?: string
   title: string
   seniority?: string
   keywords: string[]

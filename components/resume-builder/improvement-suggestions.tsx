@@ -7,9 +7,11 @@ import {
     DialogHeader,
     DialogTitle,
 } from "@/components/ui/dialog"
+import { Button } from "@/components/ui/button"
 import { Badge } from "@/components/ui/badge"
 import { ScrollArea } from "@/components/ui/scroll-area"
-import { Lightbulb, AlertTriangle, CheckCircle, ArrowRight } from "lucide-react"
+import { useState } from "react"
+import { Lightbulb, AlertTriangle, CheckCircle, ArrowRight, Wand2 } from "lucide-react"
 import type { ImprovementResponse, ImprovementSuggestion } from "@/src/services/ai"
 
 interface ImprovementSuggestionsProps {
@@ -17,9 +19,10 @@ interface ImprovementSuggestionsProps {
     onOpenChange: (open: boolean) => void
     data: ImprovementResponse | null
     isLoading: boolean
+    onApply?: (suggestions: ImprovementSuggestion[]) => Promise<void>
 }
 
-export function ImprovementSuggestions({ open, onOpenChange, data, isLoading }: ImprovementSuggestionsProps) {
+export function ImprovementSuggestions({ open, onOpenChange, data, isLoading, onApply }: ImprovementSuggestionsProps) {
     if (!data && !isLoading) return null
 
     const getPriorityColor = (priority: string) => {
@@ -37,6 +40,23 @@ export function ImprovementSuggestions({ open, onOpenChange, data, isLoading }: 
             case "Impact": return <ArrowRight className="h-4 w-4" />
             case "Formatting": return <AlertTriangle className="h-4 w-4" />
             default: return <Lightbulb className="h-4 w-4" />
+        }
+    }
+
+    const [isApplying, setIsApplying] = useState(false)
+
+    const handleApply = async () => {
+        if (!data) return
+        setIsApplying(true)
+        try {
+            // Call parent handler if provided, or internal logic
+            if (onApply) {
+                await onApply(data.suggestions)
+            }
+        } catch (error) {
+            console.error("Failed to apply improvements:", error)
+        } finally {
+            setIsApplying(false)
         }
     }
 
@@ -97,6 +117,29 @@ export function ImprovementSuggestions({ open, onOpenChange, data, isLoading }: 
                                 ))}
                             </div>
                         </ScrollArea>
+
+                        <div className="flex justify-end gap-2 pt-4 border-t">
+                            <Button variant="outline" onClick={() => onOpenChange(false)}>
+                                Close
+                            </Button>
+                            <Button
+                                onClick={handleApply}
+                                disabled={isApplying}
+                                className="gradient-accent text-white"
+                            >
+                                {isApplying ? (
+                                    <>
+                                        <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
+                                        Applying Fixes...
+                                    </>
+                                ) : (
+                                    <>
+                                        <Wand2 className="h-4 w-4 mr-2" />
+                                        Auto-Fix Resume
+                                    </>
+                                )}
+                            </Button>
+                        </div>
                     </div>
                 ) : null}
             </DialogContent>

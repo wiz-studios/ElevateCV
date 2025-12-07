@@ -43,7 +43,6 @@ const nextConfig = {
       'lucide-react',
       'recharts',
     ],
-    isrMemoryCacheSize: 0,
   },
 }
 

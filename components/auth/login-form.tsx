@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Mail, Lock, AlertCircle } from "lucide-react"
@@ -78,11 +79,9 @@ export function LoginForm() {
               </Link>
             </div>
             <div className="relative group">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors" />
-              <Input
+              <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground group-focus-within:text-primary transition-colors z-10" />
+              <PasswordInput
                 id="password"
-                type="password"
-                placeholder="••••••••"
                 value={password}
                 onChange={(e) => setPassword(e.target.value)}
                 className="pl-10 h-11 focus-visible:ring-primary/20 transition-all duration-200"
@@ -117,6 +116,6 @@ export function LoginForm() {
           </p>
         </CardFooter>
       </form>
-    </Card>
+    </Card >
   )
 }

@@ -471,3 +471,83 @@ export function optimizeLinkedInStub(resume: Resume, job: Job): LinkedInResponse
     }, [] as { company: string; bullets: string[] }[]).slice(0, 2),
   }
 }
+
+// ============================================
+// AUTO-FIX IMPROVEMENTS
+// ============================================
+
+const ApplyImprovementsSchema = z.object({
+  updated_resume: z.object({
+    summary: z.string().optional(),
+    bullets: z.array(TailoredBulletSchema),
+    skills: z.array(z.string()),
+  }),
+})
+
+const APPLY_IMPROVEMENTS_SYSTEM_PROMPT = `You are an expert resume editor.
+Your task is to apply specific improvements to a resume based on a list of suggestions.
+You must:
+1. Rewrite the summary (if suggested) to be more targeted.
+2. Rewrite specific bullets to incorporate metrics, keywords, or better action verbs as suggested.
+3. Add missing skills to the skills list if suggested.
+4. Maintain the original structure and truthfulness.
+5. Return the updated fields.`
+
+const APPLY_IMPROVEMENTS_USER_PROMPT = `
+RESUME:
+{resume_json}
+
+JOB DESCRIPTION:
+{job_json}
+
+SUGGESTIONS TO APPLY:
+{suggestions_json}
+
+Instructions:
+- Implement the "High" and "Medium" priority suggestions.
+- If a suggestion says "Quantify achievements", try to infer realistic placeholders or restructure the sentence to highlight impact.
+- If a suggestion says "Add keywords", naturally weave them into the summary or relevant bullets.
+- Return the updated summary, bullets, and skills.`
+
+export async function applyImprovements(
+  resume: Resume,
+  job: Job,
+  suggestions: ImprovementSuggestion[]
+): Promise<Partial<Resume>> {
+  const prompt = APPLY_IMPROVEMENTS_USER_PROMPT.replace("{resume_json}", JSON.stringify(resume, null, 2))
+    .replace("{job_json}", JSON.stringify(job, null, 2))
+    .replace("{suggestions_json}", JSON.stringify(suggestions, null, 2))
+
+  try {
+    const result = await generateObject({
+      model: "openai/gpt-4o",
+      schema: ApplyImprovementsSchema,
+      system: APPLY_IMPROVEMENTS_SYSTEM_PROMPT,
+      prompt,
+    })
+
+    return result.object.updated_resume as Partial<Resume>
+  } catch (error) {
+    console.error("[AI Service] Apply improvements error:", error)
+    throw new Error("Failed to apply improvements")
+  }
+}
+
+export function applyImprovementsStub(
+  resume: Resume,
+  job: Job,
+  suggestions: ImprovementSuggestion[]
+): Partial<Resume> {
+  // Stub logic: just append a note to the summary and add a skill
+  const newSummary = (resume.summary || "") + "\n\n[Improved by AI: Added missing keywords and refined tone.]"
+  const newSkills = [...resume.skills, "AI Optimized"]
+
+  return {
+    summary: newSummary,
+    skills: newSkills,
+    bullets: resume.bullets.map((b) => ({
+      ...b,
+      tailored_text: b.tailored_text ? b.tailored_text + " (Improved)" : b.raw_text + " (Improved)",
+    })),
+  }
+}

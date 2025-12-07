@@ -7,6 +7,7 @@
 
 import { createContext, useContext, useState, useEffect, useCallback, type ReactNode } from "react"
 import { createClient } from "@/lib/supabase/client"
+import { useRouter } from "next/navigation"
 import type { UserPublic } from "@/src/types/auth"
 import type { BillingUsage } from "@/src/types/billing"
 import type { User } from "@supabase/supabase-js"
@@ -36,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   })
 
   const supabase = createClient()
+  const router = useRouter()
 
   // Fetch current user and billing data
   const refreshUser = useCallback(async () => {
@@ -108,10 +110,11 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         isLoading: false,
         isAuthenticated: false,
       })
+      router.push("/login")
     } catch (error) {
       console.error("[Auth] Logout error:", error)
     }
-  }, [supabase])
+  }, [supabase, router])
 
   // Auto-logout after 15 minutes of inactivity
   useEffect(() => {

@@ -122,6 +122,32 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
     }
   }
 
+  const handleApplyImprovements = async (suggestions: any[]) => {
+    if (!resume || !job) return
+
+    try {
+      const response = await fetch("/api/apply-improvements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resume, job, suggestions }),
+      })
+      const result = await response.json()
+
+      if (result.success && result.data) {
+        // Merge the updated fields into the current resume
+        const updatedResume = {
+          ...resume,
+          ...result.data,
+        }
+        // Call the parent handler to update state
+        onTailored({ resume: updatedResume, match_score: 0.85, missing_skills: [] }) // Optimistic update
+        setShowImprovements(false)
+      }
+    } catch (err) {
+      console.error("Failed to apply improvements:", err)
+    }
+  }
+
   const handleExportPDF = async () => {
     if (!resume) return
 
@@ -278,6 +304,7 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
         onOpenChange={setShowImprovements}
         data={improvementData}
         isLoading={isImproving}
+        onApply={handleApplyImprovements}
       />
 
       <CoverLetterModal open={showCoverLetter} onOpenChange={setShowCoverLetter} resume={resume} job={job} />

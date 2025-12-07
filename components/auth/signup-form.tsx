@@ -9,6 +9,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { PasswordInput } from "@/components/ui/password-input"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Alert, AlertDescription } from "@/components/ui/alert"
 import { Loader2, Mail, Lock, User, AlertCircle, Check } from "lucide-react"
@@ -112,8 +113,8 @@ export function SignupForm() {
           <div className="space-y-2">
             <Label htmlFor="password">Password</Label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
+              <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground z-10" />
+              <PasswordInput
                 id="password"
                 type="password"
                 placeholder="••••••••"
@@ -129,9 +130,8 @@ export function SignupForm() {
                 {PASSWORD_REQUIREMENTS.map((req, i) => (
                   <div
                     key={i}
-                    className={`flex items-center gap-2 text-xs ${
-                      req.test(password) ? "text-green-600" : "text-muted-foreground"
-                    }`}
+                    className={`flex items-center gap-2 text-xs ${req.test(password) ? "text-green-600" : "text-muted-foreground"
+                      }`}
                   >
                     <Check className={`h-3 w-3 ${req.test(password) ? "opacity-100" : "opacity-30"}`} />
                     {req.label}
@@ -144,8 +144,8 @@ export function SignupForm() {
           <div className="space-y-2">
             <Label htmlFor="confirmPassword">Confirm Password</Label>
             <div className="relative">
-              <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
-              <Input
+              <Lock className="absolute left-3 top-3 h-4 w-4 text-muted-foreground z-10" />
+              <PasswordInput
                 id="confirmPassword"
                 type="password"
                 placeholder="••••••••"
