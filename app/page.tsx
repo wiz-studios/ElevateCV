@@ -281,44 +281,7 @@ export default function ResumeBuildPage() {
                           <JSONPreview title="Parsed Resume Data" data={displayResume} />
                         ) : (
                           <div className="p-12 text-center text-muted-foreground">
-                            No resume data available yet
+                            <UpgradeModal open={showHeaderUpgrade} onOpenChange={setShowHeaderUpgrade} />
                           </div>
-                        )}
-                      </TabsContent>
-
-                      <TabsContent value="job-json" className="m-0">
-                        {job ? (
-                          <JSONPreview title="Parsed Job Data" data={job} />
-                        ) : (
-                          <div className="p-12 text-center text-muted-foreground">
-                            No job data available yet
-                          </div>
-                        )}
-                      </TabsContent>
-                    </Tabs>
-                  </CardContent>
-                </Card>
-              </TabsContent>
-            </Tabs>
-          </div>
-        </div>
-      </main>
-
-      <footer className="border-t mt-12 bg-muted/30">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
-            <p>© 2024 ElevateCV. All rights reserved.</p>
-            <div className="flex items-center gap-6">
-              <Link href="/how-it-works" className="hover:text-foreground transition-colors">How It Works</Link>
-              <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
-              <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
-              <Link href="/support" className="hover:text-foreground transition-colors">Support</Link>
-            </div>
-          </div>
-        </div>
-      </footer>
-
-      <UpgradeModal open={showHeaderUpgrade} onOpenChange={setShowHeaderUpgrade} />
-    </div>
-  )
-}
+                        )
+                        }
