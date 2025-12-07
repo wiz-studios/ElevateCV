@@ -1,11 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
+  output: 'standalone',
   reactStrictMode: false,
   typescript: {
     ignoreBuildErrors: true,
   },
   images: {
     unoptimized: true,
+  },
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
   },
   experimental: {
     optimizePackageImports: [
@@ -39,6 +43,7 @@ const nextConfig = {
       'lucide-react',
       'recharts',
     ],
+    isrMemoryCacheSize: 0,
   },
 }
 

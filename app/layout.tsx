@@ -6,6 +6,10 @@ import { AuthProvider } from "@/contexts/auth-context"
 import { Navbar } from "@/components/navbar"
 import "./globals.css"
 
+export const dynamic = 'force-dynamic'
+export const dynamicParams = true
+export const revalidate = 0
+
 const _geist = Geist({ subsets: ["latin"] })
 const _geistMono = Geist_Mono({ subsets: ["latin"] })
 
