@@ -13,6 +13,8 @@ export type AuditAction =
   | "ai.tailor_request"
   | "ai.tailor_success"
   | "ai.tailor_failed"
+  | "ai.improvements_request"
+  | "ai.improvements_success"
   | "ai.parse_resume"
   | "ai.parse_job"
   | "billing.subscription_created"

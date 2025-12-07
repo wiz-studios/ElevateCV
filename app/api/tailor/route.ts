@@ -17,16 +17,16 @@ const USE_AI = process.env.USE_AI_TAILORING === "true"
 
 export async function POST(request: NextRequest) {
   try {
+    console.log("[API] Tailor request received")
     const body: TailorRequest = await request.json()
 
     const authResult = await protectedTailorMiddleware(request)
 
     // Require authentication - no demo mode for tailoring
     if ("error" in authResult) {
-      return NextResponse.json<TailorResponse>(
-        { success: false, error: "Authentication required. Please sign in to use AI tailoring." },
-        { status: 401 },
-      )
+      console.log("[API] Auth/Quota error:", authResult.error)
+      // Return the specific error response from middleware (e.g. quota exceeded)
+      return authResult.error
     }
 
     const userId = authResult.user.id
@@ -107,6 +107,8 @@ export async function POST(request: NextRequest) {
         throw stubError
       }
     }
+
+    console.log("[API] Tailoring complete, result:", result ? "Success" : "Empty")
 
     let similarBullets: BulletSimilarityMatch[] = []
     try {

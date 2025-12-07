@@ -189,6 +189,106 @@ export function tailorResumeStub(resume: Resume, job: Job, style: TailoringStyle
 }
 
 // ============================================
+// IMPROVEMENT SUGGESTIONS (New Feature)
+// ============================================
+
+export interface ImprovementSuggestion {
+  id: string
+  category: "Content" | "Formatting" | "Keywords" | "Impact"
+  suggestion: string
+  reasoning: string
+  priority: "High" | "Medium" | "Low"
+}
+
+export interface ImprovementResponse {
+  suggestions: ImprovementSuggestion[]
+  overall_score: number
+}
+
+const ImprovementSchema = z.object({
+  suggestions: z.array(
+    z.object({
+      id: z.string(),
+      category: z.enum(["Content", "Formatting", "Keywords", "Impact"]),
+      suggestion: z.string(),
+      reasoning: z.string(),
+      priority: z.enum(["High", "Medium", "Low"]),
+    })
+  ),
+  overall_score: z.number().min(0).max(100),
+})
+
+const IMPROVEMENT_SYSTEM_PROMPT = `You are an expert career coach. Analyze the resume against the job description and provide actionable improvements.
+Focus on:
+1. Missing keywords and skills
+2. Quantifiable impact (metrics)
+3. Clarity and formatting
+4. Alignment with the job role
+
+Provide specific, constructive feedback.`
+
+const IMPROVEMENT_USER_PROMPT = `
+RESUME:
+{resume_json}
+
+JOB DESCRIPTION:
+{job_json}
+
+Provide a list of specific improvements to increase the match score and impact.`
+
+export async function suggestImprovements(resume: Resume, job: Job): Promise<ImprovementResponse> {
+  const prompt = IMPROVEMENT_USER_PROMPT.replace("{resume_json}", JSON.stringify(resume, null, 2))
+    .replace("{job_json}", JSON.stringify(job, null, 2))
+
+  try {
+    const result = await generateObject({
+      model: "openai/gpt-4o",
+      schema: ImprovementSchema,
+      system: IMPROVEMENT_SYSTEM_PROMPT,
+      prompt,
+    })
+
+    return result.object as ImprovementResponse
+  } catch (error) {
+    console.error("[AI Service] Improvement suggestion error:", error)
+    throw new Error("Failed to generate improvements")
+  }
+}
+
+export function suggestImprovementsStub(resume: Resume, job: Job): ImprovementResponse {
+  const missingSkills = getMissingSkills(resume, job)
+
+  const suggestions: ImprovementSuggestion[] = [
+    {
+      id: "1",
+      category: "Keywords",
+      suggestion: `Add missing keywords: ${missingSkills.slice(0, 3).join(", ")}`,
+      reasoning: "These skills are prominent in the job description but missing from your resume.",
+      priority: "High",
+    },
+    {
+      id: "2",
+      category: "Impact",
+      suggestion: "Quantify your achievements with metrics.",
+      reasoning: "Bullets with numbers (e.g., 'increased revenue by 20%') are more persuasive.",
+      priority: "Medium",
+    },
+    {
+      id: "3",
+      category: "Content",
+      suggestion: "Tailor your summary to the specific role.",
+      reasoning: "A targeted summary helps recruiters quickly see your fit.",
+      priority: "Medium",
+    },
+  ]
+
+  return {
+    suggestions,
+    overall_score: 75,
+  }
+}
+
+// ============================================
 // EMBEDDING & SIMILARITY (Phase 2+)
 // ============================================
 

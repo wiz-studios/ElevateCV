@@ -14,14 +14,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog"
-import { Wand2, Download, Loader2, FileText, AlertCircle, Lock } from "lucide-react"
+import { Wand2, Download, Loader2, FileText, AlertCircle, Lock, Lightbulb } from "lucide-react"
 import { UsageDisplay } from "@/components/billing/usage-display"
 import { UpgradeModal } from "@/components/billing/upgrade-modal"
 import { QuotaExceededBanner } from "@/components/billing/quota-exceeded-banner"
+import { ImprovementSuggestions } from "./improvement-suggestions"
 import type { Resume } from "@/src/types/resume"
 import type { Job } from "@/src/types/job"
 import type { TailoringStyle, TailorResponseData } from "@/src/types/tailor"
 import type { ResumeTemplate } from "@/src/types/template"
+import type { ImprovementResponse } from "@/src/services/ai"
 
 interface TailorControlsProps {
   resume: Resume | null
@@ -40,6 +42,11 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
   const [quotaError, setQuotaError] = useState<string | null>(null)
   const [showUpgradeModal, setShowUpgradeModal] = useState(false)
   const [showLoginPrompt, setShowLoginPrompt] = useState(false)
+
+  // New state for improvements
+  const [showImprovements, setShowImprovements] = useState(false)
+  const [improvementData, setImprovementData] = useState<ImprovementResponse | null>(null)
+  const [isImproving, setIsImproving] = useState(false)
 
   const canTailor = resume && job
 
@@ -85,6 +92,30 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
       setError("Network error. Please try again.")
     } finally {
       setIsLoading(false)
+    }
+  }
+
+  const handleSuggestImprovements = async () => {
+    if (!resume || !job) return
+
+    setShowImprovements(true)
+    if (improvementData) return // Don't re-fetch if we have data
+
+    setIsImproving(true)
+    try {
+      const response = await fetch("/api/suggest-improvements", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ resume, job }),
+      })
+      const result = await response.json()
+      if (result.success) {
+        setImprovementData(result.data)
+      }
+    } catch (err) {
+      console.error("Failed to get improvements:", err)
+    } finally {
+      setIsImproving(false)
     }
   }
 
@@ -175,23 +206,35 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
 
           {error && <p className="text-sm text-destructive">{error}</p>}
 
-          <div className="flex gap-2">
-            <Button onClick={handleTailor} disabled={!canTailor || isLoading} className="flex-1">
-              {isLoading ? (
-                <>
-                  <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                  Tailoring...
-                </>
-              ) : (
-                <>
-                  <Wand2 className="h-4 w-4 mr-2" />
-                  Tailor Resume
-                </>
-              )}
+          <div className="flex flex-col gap-3">
+            <div className="flex gap-2">
+              <Button onClick={handleTailor} disabled={!canTailor || isLoading} className="flex-1">
+                {isLoading ? (
+                  <>
+                    <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                    Tailoring...
+                  </>
+                ) : (
+                  <>
+                    <Wand2 className="h-4 w-4 mr-2" />
+                    Tailor Resume
+                  </>
+                )}
+              </Button>
+            </div>
+
+            <Button
+              variant="outline"
+              onClick={handleSuggestImprovements}
+              disabled={!canTailor || isLoading}
+              className="w-full border-dashed border-primary/50 hover:border-primary hover:bg-primary/5 text-primary"
+            >
+              <Lightbulb className="h-4 w-4 mr-2" />
+              Suggest Improvements
             </Button>
           </div>
 
-          <div className="flex gap-2 pt-2 border-t">
+          <div className="flex gap-2 pt-2 border-t mt-2">
             <Button variant="outline" onClick={handleExportPDF} disabled={!resume} className="flex-1 bg-transparent">
               <Download className="h-4 w-4 mr-2" />
               Export PDF
@@ -205,6 +248,13 @@ export function TailorControls({ resume, job, onTailored, template }: TailorCont
       </Card>
 
       <UpgradeModal open={showUpgradeModal} onOpenChange={setShowUpgradeModal} quotaExceeded={quotaExceeded} />
+
+      <ImprovementSuggestions
+        open={showImprovements}
+        onOpenChange={setShowImprovements}
+        data={improvementData}
+        isLoading={isImproving}
+      />
     </>
   )
 }
