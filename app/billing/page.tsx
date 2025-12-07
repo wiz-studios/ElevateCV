@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = 'force-dynamic'
+
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
 import { ProtectedRoute } from "@/components/auth/protected-route"
@@ -156,9 +158,8 @@ function BillingContent() {
                 ].map((pkg) => (
                   <Card
                     key={pkg.credits}
-                    className={`relative cursor-pointer hover:border-primary transition-colors ${
-                      pkg.popular ? "border-primary" : ""
-                    }`}
+                    className={`relative cursor-pointer hover:border-primary transition-colors ${pkg.popular ? "border-primary" : ""
+                      }`}
                   >
                     {pkg.popular && (
                       <Badge className="absolute -top-2 left-1/2 -translate-x-1/2 text-xs">Best Value</Badge>

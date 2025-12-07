@@ -1,5 +1,7 @@
 "use client"
 
+export const dynamic = 'force-dynamic'
+
 import { Suspense } from "react"
 import CheckoutContent from "./checkout-content"
 import { Loader2 } from "lucide-react"
