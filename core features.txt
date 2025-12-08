@@ -1,0 +1,93 @@
+🔑 Core Features
+1. Resume Parsing
+Extracts structured data from raw resume text
+Regex-based + AI-enhanced parsing
+Identifies: name, email, phone, skills, experience bullets, summary
+2. Job Description Parsing
+Extracts job title, keywords, responsibilities
+Identifies seniority level and requirements
+3. AI Tailoring ✨
+Rewrites resume bullets to match job requirements
+Incorporates relevant keywords naturally
+Provides match score and missing skills analysis
+Supports "concise" and "detailed" styles
+4. ATS Scoring
+Checks resume compatibility with ATS systems
+Analyzes keyword density, formatting, structure
+Provides actionable improvement suggestions
+5. Additional AI Features
+Cover Letter Generation: Creates personalized cover letters
+LinkedIn Optimization: Optimizes profile for recruiters
+Improvement Suggestions: Provides specific feedback
+6. Template System
+Multiple resume templates (professional, modern, minimal)
+PDF export with custom styling
+7. Billing & Monetization 💰
+Free Plan: 3 tailors/month
+Pro Plan: 50 tailors/month ($9.99/mo or $99/yr)
+Premium Plan: Unlimited ($19.99/mo or $199/yr)
+Credit System: Pay-as-you-go credits available
+🗄️ Database Schema (Supabase)
+Tables
+profiles: User data (plan, credits, usage)
+usage_logs: AI usage tracking
+Authentication
+Supabase Auth with email/password
+Automatic profile creation via database trigger
+Row Level Security (RLS) policies
+🚀 Development Status
+✅ Completed (Phase 1-2)
+Resume & job parsing (regex + AI)
+AI tailoring with Vercel AI SDK
+ATS scoring algorithm
+Full frontend UI with preview
+Supabase authentication
+Billing system with quotas
+Template system
+Embedding-based similarity
+🔄 Current State
+USE_AI_TAILORING=true (AI enabled)
+Supabase connected and configured
+Stripe integration (partial)
+📋 Planned (Phase 3)
+Full Stripe payment flow
+DOCX file upload support
+Advanced PDF generation with Puppeteer
+User resume history/versioning
+🔧 Environment Configuration
+Your 
+.env.local
+ is configured with:
+
+✅ Supabase URL and keys
+✅ AI tailoring enabled
+✅ App URL set to localhost:3000
+📊 Key Metrics & Goals
+User Engagement: 80% completion rate
+AI Quality: 20% average match score improvement
+ATS Compatibility: 90% of resumes score 70+
+Export Rate: 60% PDF download rate
+🎨 UI/UX Highlights
+Clean, modern interface with glassmorphism effects
+Real-time preview with visual/JSON tabs
+Match score display with missing skills analysis
+Template selector with live preview
+Usage quota display in header
+Upgrade prompts for free users
+💡 Notable Implementation Details
+Dual Parsing Strategy: Falls back to regex if AI parsing fails
+Stub Functions: AI features have stub implementations for testing without API calls
+Quota System: Tracks monthly usage + credit balance
+Type Safety: Strict TypeScript with Zod schemas for AI outputs
+Modular Architecture: Clean separation of concerns (services, components, types)
+🔍 What Would You Like to Work On?
+I can help you with:
+
+🐛 Debugging issues
+✨ Adding new features (e.g., completing Stripe integration)
+🎨 UI improvements
+📝 Documentation
+🧪 Testing
+🚀 Deployment preparation
+🔧 Refactoring or optimization
+What would you like to focus on today?
