@@ -87,20 +87,20 @@ export default function ResumeBuildPage() {
   const displayResume = tailoredResume || resume
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen bg-background overflow-x-hidden">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
-        <div className="container mx-auto px-4 h-16 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3 transition-opacity hover:opacity-70">
-            <div className="p-2 bg-foreground rounded-lg">
-              <FileText className="h-5 w-5 text-background" />
+        <div className="container mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between gap-2">
+          <Link href="/" className="flex items-center gap-1.5 sm:gap-3 transition-opacity hover:opacity-70 flex-shrink-0">
+            <div className="p-1.5 sm:p-2 bg-foreground rounded-lg">
+              <FileText className="h-4 w-4 sm:h-5 sm:w-5 text-background" />
             </div>
             <div>
-              <h1 className="text-lg font-semibold tracking-tight">ElevateCV</h1>
+              <h1 className="text-base sm:text-lg font-semibold tracking-tight">ElevateCV</h1>
             </div>
           </Link>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-1.5 sm:gap-4">
             <Link href="/how-it-works" className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors">
               How It Works
             </Link>
@@ -109,7 +109,7 @@ export default function ResumeBuildPage() {
             </Link>
             {isAuthenticated && (
               <>
-                <div className="hidden md:block">
+                <div className="hidden lg:block">
                   <UsageDisplay compact onUpgradeClick={() => setShowHeaderUpgrade(true)} />
                 </div>
                 {user?.plan === "free" && (
@@ -117,10 +117,11 @@ export default function ResumeBuildPage() {
                     variant="gradient"
                     size="sm"
                     onClick={() => setShowHeaderUpgrade(true)}
-                    className="hidden sm:flex bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0 shadow-sm"
+                    className="hidden lg:flex bg-gradient-to-r from-amber-500 to-orange-500 hover:from-amber-600 hover:to-orange-600 text-white border-0 shadow-sm text-xs sm:text-sm"
                   >
-                    <Crown className="h-4 w-4 mr-2" />
-                    Upgrade Pro
+                    <Crown className="h-3 w-3 sm:h-4 sm:w-4 mr-1 sm:mr-2" />
+                    <span className="hidden sm:inline">Upgrade Pro</span>
+                    <span className="sm:hidden">Pro</span>
                   </Button>
                 )}
               </>
@@ -130,39 +131,39 @@ export default function ResumeBuildPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-4 py-6 md:py-8 space-y-6 md:space-y-8">
-        <div className="grid lg:grid-cols-12 gap-6 md:gap-8 items-start">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 space-y-4 sm:space-y-6 md:space-y-8 overflow-x-hidden">
+        <div className="grid lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-start">
           {/* Left Column: Builder Controls (5 cols) */}
-          <div className="lg:col-span-5 space-y-4 md:space-y-6">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="h-8 w-1 bg-primary rounded-full" />
-              <h2 className="text-lg font-semibold">Builder Inputs</h2>
+          <div className="lg:col-span-5 space-y-3 sm:space-y-4 md:space-y-6">
+            <div className="flex items-center gap-2 mb-1 sm:mb-2">
+              <div className="h-6 sm:h-8 w-1 bg-primary rounded-full flex-shrink-0" />
+              <h2 className="text-base sm:text-lg font-semibold">Builder Inputs</h2>
             </div>
 
             {/* Resume Input */}
             <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm overflow-hidden">
-              <CardHeader className="pb-3 bg-muted/30 border-b border-border/50">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <FileText className="h-4 w-4 text-primary" />
+              <CardHeader className="pb-2 sm:pb-3 px-4 sm:px-6 pt-4 sm:pt-6 bg-muted/30 border-b border-border/50">
+                <CardTitle className="text-sm sm:text-base flex items-center gap-2">
+                  <FileText className="h-4 w-4 text-primary flex-shrink-0" />
                   Resume Content
                 </CardTitle>
-                <CardDescription>Upload your existing resume or paste content</CardDescription>
+                <CardDescription className="text-xs sm:text-sm">Upload your existing resume or paste content</CardDescription>
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
                 <ResumeUpload onParsed={handleResumeParsed} />
               </CardContent>
             </Card>
 
             {/* Job Input */}
             <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm overflow-hidden">
-              <CardHeader className="pb-3 bg-muted/30 border-b border-border/50">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Briefcase className="h-4 w-4 text-primary" />
+              <CardHeader className="pb-2 sm:pb-3 px-4 sm:px-6 pt-4 sm:pt-6 bg-muted/30 border-b border-border/50">
+                <CardTitle className="text-sm sm:text-base flex items-center gap-2">
+                  <Briefcase className="h-4 w-4 text-primary flex-shrink-0" />
                   Target Job
                 </CardTitle>
-                <CardDescription>Paste the job description you want to apply for</CardDescription>
+                <CardDescription className="text-xs sm:text-sm">Paste the job description you want to apply for</CardDescription>
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
                 <JobInput onParsed={handleJobParsed} />
               </CardContent>
             </Card>
@@ -170,14 +171,14 @@ export default function ResumeBuildPage() {
             {/* Tailor Controls */}
             <Card className="border-none shadow-lg ring-1 ring-primary/10 overflow-hidden relative">
               <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-transparent pointer-events-none" />
-              <CardHeader className="pb-3">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <Sparkles className="h-4 w-4 text-amber-500" />
+              <CardHeader className="pb-2 sm:pb-3 px-4 sm:px-6 pt-4 sm:pt-6">
+                <CardTitle className="text-sm sm:text-base flex items-center gap-2">
+                  <Sparkles className="h-4 w-4 text-amber-500 flex-shrink-0" />
                   AI Customization
                 </CardTitle>
-                <CardDescription>Configure how the AI should tailor your resume</CardDescription>
+                <CardDescription className="text-xs sm:text-sm">Configure how the AI should tailor your resume</CardDescription>
               </CardHeader>
-              <CardContent>
+              <CardContent className="px-4 sm:px-6 pb-4 sm:pb-6">
                 <TailorControls
                   resume={resume}
                   job={job}
@@ -189,23 +190,23 @@ export default function ResumeBuildPage() {
 
             {/* Template Selector */}
             <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm overflow-hidden">
-              <CardHeader className="pb-3 bg-muted/30 border-b border-border/50">
-                <CardTitle className="text-base flex items-center gap-2">
-                  <LayoutTemplate className="h-4 w-4 text-primary" />
+              <CardHeader className="pb-2 sm:pb-3 px-4 sm:px-6 pt-4 sm:pt-6 bg-muted/30 border-b border-border/50">
+                <CardTitle className="text-sm sm:text-base flex items-center gap-2">
+                  <LayoutTemplate className="h-4 w-4 text-primary flex-shrink-0" />
                   Design Template
                 </CardTitle>
               </CardHeader>
-              <CardContent className="pt-6">
+              <CardContent className="pt-4 sm:pt-6 px-4 sm:px-6">
                 <TemplateSelector selectedTemplate={selectedTemplate} onTemplateChange={setSelectedTemplate} />
               </CardContent>
             </Card>
           </div>
 
           {/* Right Column: Preview & Results (7 cols) */}
-          <div className="lg:col-span-7 space-y-4 md:space-y-6">
-            <div className="flex items-center gap-2 mb-2">
-              <div className="h-8 w-1 bg-green-500 rounded-full" />
-              <h2 className="text-lg font-semibold">Live Preview</h2>
+          <div className="lg:col-span-7 space-y-3 sm:space-y-4 md:space-y-6">
+            <div className="flex items-center gap-2 mb-1 sm:mb-2">
+              <div className="h-6 sm:h-8 w-1 bg-green-500 rounded-full flex-shrink-0" />
+              <h2 className="text-base sm:text-lg font-semibold">Live Preview</h2>
             </div>
 
             <Tabs defaultValue="preview" className="w-full">
@@ -304,11 +305,11 @@ export default function ResumeBuildPage() {
         </div>
       </main>
 
-      <footer className="border-t mt-12 bg-muted/30">
-        <div className="container mx-auto px-4 py-8">
-          <div className="flex flex-col md:flex-row justify-between items-center gap-4 text-sm text-muted-foreground">
+      <footer className="border-t mt-8 sm:mt-12 bg-muted/30">
+        <div className="container mx-auto px-3 sm:px-4 py-6 sm:py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-3 sm:gap-4 text-xs sm:text-sm text-muted-foreground">
             <p>© 2024 ElevateCV. All rights reserved.</p>
-            <div className="flex items-center gap-6">
+            <div className="flex items-center gap-4 sm:gap-6 flex-wrap justify-center">
               <Link href="/how-it-works" className="hover:text-foreground transition-colors">How It Works</Link>
               <Link href="/privacy" className="hover:text-foreground transition-colors">Privacy</Link>
               <Link href="/terms" className="hover:text-foreground transition-colors">Terms</Link>
