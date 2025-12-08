@@ -195,7 +195,7 @@ export default function ResumeBuildPage() {
           </div>
 
           {/* Right Column: Preview & Results (7 cols) */}
-          <div className="lg:col-span-7 space-y-3 sm:space-y-4 md:space-y-6">
+          <div className="lg:col-span-7 space-y-3 sm:space-y-4 md:space-y-6 lg:sticky lg:top-20 h-fit">
             <div className="flex items-center gap-2 mb-1 sm:mb-2">
               <div className="h-6 sm:h-8 w-1 bg-green-500 rounded-full flex-shrink-0" />
               <h2 className="text-base sm:text-lg font-semibold">Live Preview</h2>
