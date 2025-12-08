@@ -1,34 +1,28 @@
-import Stripe from "stripe"
+/**
+ * Paystack Configuration
+ * 
+ * Product catalog and pricing for Paystack payments.
+ * All prices are in USD ($).
+ * 
+ * @see https://paystack.com/docs
+ */
 
-// Initialize Stripe with secret key
-// Note: STRIPE_SECRET_KEY can be empty during build time, actual initialization happens at runtime
-const stripeKey = process.env.STRIPE_SECRET_KEY || ""
-export const stripe = stripeKey ? new Stripe(stripeKey, {
-  apiVersion: "2025-11-17.clover",
-  typescript: true,
-}) : (null as any)
-
-// Product IDs for Stripe (configure these in your Stripe dashboard)
-export const STRIPE_PRODUCTS = {
+// Product IDs for Paystack (configure these in your Paystack dashboard)
+export const PAYSTACK_PRODUCTS = {
   // Subscription plans
-  premium_monthly: process.env.STRIPE_PREMIUM_MONTHLY_PRICE_ID || "price_premium_monthly",
-  premium_yearly: process.env.STRIPE_PREMIUM_YEARLY_PRICE_ID || "price_premium_yearly",
-  enterprise_monthly: process.env.STRIPE_ENTERPRISE_MONTHLY_PRICE_ID || "price_enterprise_monthly",
-  enterprise_yearly: process.env.STRIPE_ENTERPRISE_YEARLY_PRICE_ID || "price_enterprise_yearly",
-
-  // Credit packages (one-time payments)
-  credits_5: process.env.STRIPE_CREDITS_5_PRICE_ID || "price_credits_5",
-  credits_15: process.env.STRIPE_CREDITS_15_PRICE_ID || "price_credits_15",
-  credits_50: process.env.STRIPE_CREDITS_50_PRICE_ID || "price_credits_50",
+  premium_monthly: process.env.PAYSTACK_PREMIUM_MONTHLY_PLAN_CODE || "PLN_premium_monthly",
+  premium_yearly: process.env.PAYSTACK_PREMIUM_YEARLY_PLAN_CODE || "PLN_premium_yearly",
+  enterprise_monthly: process.env.PAYSTACK_ENTERPRISE_MONTHLY_PLAN_CODE || "PLN_enterprise_monthly",
+  enterprise_yearly: process.env.PAYSTACK_ENTERPRISE_YEARLY_PLAN_CODE || "PLN_enterprise_yearly",
 } as const
 
-// Product metadata
+// Product metadata and pricing
 export const PRODUCTS = [
   {
     id: "premium_monthly",
     name: "Premium Monthly",
     description: "Unlimited AI-tailored resumes with advanced features",
-    priceInCents: 999,
+    price: 9.99, // $9.99/month
     type: "subscription" as const,
     interval: "month" as const,
     plan: "premium" as const,
@@ -37,7 +31,7 @@ export const PRODUCTS = [
     id: "premium_yearly",
     name: "Premium Yearly",
     description: "Unlimited AI-tailored resumes - Save 33%",
-    priceInCents: 7999,
+    price: 79.99, // $79.99/year
     type: "subscription" as const,
     interval: "year" as const,
     plan: "premium" as const,
@@ -46,7 +40,7 @@ export const PRODUCTS = [
     id: "enterprise_monthly",
     name: "Enterprise Monthly",
     description: "Team features with API access and custom branding",
-    priceInCents: 4999,
+    price: 49.99, // $49.99/month
     type: "subscription" as const,
     interval: "month" as const,
     plan: "enterprise" as const,
@@ -55,7 +49,7 @@ export const PRODUCTS = [
     id: "credits_5",
     name: "5 Resume Credits",
     description: "5 AI-tailored resumes",
-    priceInCents: 499,
+    price: 4.99, // $4.99
     type: "credits" as const,
     credits: 5,
   },
@@ -63,7 +57,7 @@ export const PRODUCTS = [
     id: "credits_15",
     name: "15 Resume Credits",
     description: "15 AI-tailored resumes - Best Value",
-    priceInCents: 999,
+    price: 9.99, // $9.99
     type: "credits" as const,
     credits: 15,
     popular: true,
@@ -72,8 +66,26 @@ export const PRODUCTS = [
     id: "credits_50",
     name: "50 Resume Credits",
     description: "50 AI-tailored resumes - Bulk discount",
-    priceInCents: 2499,
+    price: 24.99, // $24.99
     type: "credits" as const,
     credits: 50,
   },
 ]
+
+/**
+ * Convert dollars to cents (Paystack uses smallest currency unit)
+ * @param amount Amount in dollars
+ * @returns Amount in cents
+ */
+export function toCents(amount: number): number {
+  return Math.round(amount * 100)
+}
+
+/**
+ * Convert cents to dollars
+ * @param cents Amount in cents
+ * @returns Amount in dollars
+ */
+export function fromCents(cents: number): number {
+  return cents / 100
+}
