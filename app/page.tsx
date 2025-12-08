@@ -210,22 +210,24 @@ export default function ResumeBuildPage() {
             </div>
 
             <Tabs defaultValue="preview" className="w-full">
-              <div className="flex items-center justify-between mb-4">
-                <TabsList className="bg-muted/50 p-1 border">
-                  <TabsTrigger value="preview" className="data-[state=active]:bg-background data-[state=active]:shadow-sm">
-                    <FileText className="h-4 w-4 mr-2" />
-                    Visual Preview
+              <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3 sm:gap-0 mb-4">
+                <TabsList className="bg-muted/50 p-1 border w-full sm:w-auto">
+                  <TabsTrigger value="preview" className="data-[state=active]:bg-background data-[state=active]:shadow-sm text-xs sm:text-sm flex-1 sm:flex-none">
+                    <FileText className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                    <span className="hidden sm:inline">Visual Preview</span>
+                    <span className="sm:hidden">Preview</span>
                   </TabsTrigger>
-                  <TabsTrigger value="json" className="data-[state=active]:bg-background data-[state=active]:shadow-sm">
-                    <FileJson className="h-4 w-4 mr-2" />
-                    Data View
+                  <TabsTrigger value="json" className="data-[state=active]:bg-background data-[state=active]:shadow-sm text-xs sm:text-sm flex-1 sm:flex-none">
+                    <FileJson className="h-3 w-3 sm:h-4 sm:w-4 sm:mr-2" />
+                    <span className="hidden sm:inline">Data View</span>
+                    <span className="sm:hidden">Data</span>
                   </TabsTrigger>
                 </TabsList>
 
                 {matchScore !== undefined && (
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-700 dark:text-green-400 rounded-full text-sm font-medium border border-green-500/20">
-                    <Sparkles className="h-3.5 w-3.5" />
-                    Match Score: {matchScore}%
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-green-500/10 text-green-700 dark:text-green-400 rounded-full text-xs sm:text-sm font-medium border border-green-500/20 w-full sm:w-auto justify-center sm:justify-start">
+                    <Sparkles className="h-3 w-3 sm:h-3.5 sm:w-3.5 flex-shrink-0" />
+                    <span className="whitespace-nowrap">Match: {matchScore}%</span>
                   </div>
                 )}
               </div>
