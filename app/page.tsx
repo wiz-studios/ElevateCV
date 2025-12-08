@@ -1,6 +1,6 @@
 "use client"
 
-export const dynamic = 'force-dynamic'
+
 
 import { useState, useEffect } from "react"
 import Link from "next/link"
@@ -123,11 +123,11 @@ export default function ResumeBuildPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 space-y-4 sm:space-y-6 md:space-y-8">
-        <div className="grid lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-start">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 lg:h-[calc(100vh-4rem)] lg:overflow-hidden">
+        <div className="grid lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-start lg:h-full">
           {/* Left Column: Builder Controls (5 cols) */}
-          <div className="lg:col-span-5 space-y-3 sm:space-y-4 md:space-y-6">
-            <div className="flex items-center gap-2 mb-1 sm:mb-2">
+          <div className="lg:col-span-5 space-y-3 sm:space-y-4 md:space-y-6 lg:h-full lg:overflow-y-auto lg:pr-2 scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
+            <div className="flex items-center gap-2 mb-1 sm:mb-2 sticky top-0 bg-background/95 backdrop-blur z-10 py-2">
               <div className="h-6 sm:h-8 w-1 bg-primary rounded-full flex-shrink-0" />
               <h2 className="text-base sm:text-lg font-semibold">Builder Inputs</h2>
             </div>
@@ -181,7 +181,7 @@ export default function ResumeBuildPage() {
             </Card>
 
             {/* Template Selector */}
-            <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm overflow-hidden">
+            <Card className="border-none shadow-md bg-card/50 backdrop-blur-sm overflow-hidden mb-6">
               <CardHeader className="pb-2 sm:pb-3 px-4 sm:px-6 pt-4 sm:pt-6 bg-muted/30 border-b border-border/50">
                 <CardTitle className="text-sm sm:text-base flex items-center gap-2">
                   <LayoutTemplate className="h-4 w-4 text-primary flex-shrink-0" />
@@ -195,8 +195,8 @@ export default function ResumeBuildPage() {
           </div>
 
           {/* Right Column: Preview & Results (7 cols) */}
-          <div className="lg:col-span-7 space-y-3 sm:space-y-4 md:space-y-6 lg:sticky lg:top-20 h-fit">
-            <div className="flex items-center gap-2 mb-1 sm:mb-2">
+          <div className="lg:col-span-7 space-y-3 sm:space-y-4 md:space-y-6 lg:h-full lg:overflow-y-auto lg:pl-2 scrollbar-thin scrollbar-thumb-muted-foreground/20 scrollbar-track-transparent">
+            <div className="flex items-center gap-2 mb-1 sm:mb-2 sticky top-0 bg-background/95 backdrop-blur z-10 py-2">
               <div className="h-6 sm:h-8 w-1 bg-green-500 rounded-full flex-shrink-0" />
               <h2 className="text-base sm:text-lg font-semibold">Live Preview</h2>
             </div>

@@ -57,6 +57,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         return
       }
 
+      // Optimistic update: Set basic user data immediately
+      setState({
+        user: {
+          id: user.id,
+          email: user.email || "",
+          plan: "free", // Default until verified
+          credits: 0,
+          email_verified: true,
+          created_at: user.created_at,
+        },
+        billing: null,
+        isLoading: false, // Stop loading immediately
+        isAuthenticated: true,
+      })
+
       // Fetch user profile and billing from API
       const response = await fetch("/api/auth/me", {
         credentials: "include",
