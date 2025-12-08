@@ -5,8 +5,7 @@ import type React from "react"
 import { useState, useCallback } from "react"
 import { Button } from "@/components/ui/button"
 import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
-import { Upload, FileText, Loader2 } from "lucide-react"
+import { Upload, Loader2 } from "lucide-react"
 import { EXAMPLE_RESUME_TEXT } from "@/lib/example-data"
 
 interface ResumeUploadProps {
@@ -65,51 +64,42 @@ export function ResumeUpload({ onParsed }: ResumeUploadProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <FileText className="h-5 w-5" />
-          Resume Input
-        </CardTitle>
-        <CardDescription>Paste your resume text or upload a file</CardDescription>
-      </CardHeader>
-      <CardContent className="space-y-4">
-        <div className="flex gap-2">
-          <label className="cursor-pointer">
-            <input type="file" accept=".txt,.docx" onChange={handleFileUpload} className="hidden" />
-            <Button variant="outline" asChild>
-              <span>
-                <Upload className="h-4 w-4 mr-2" />
-                Upload File
-              </span>
-            </Button>
-          </label>
-          <Button variant="ghost" onClick={loadExample}>
-            Load Example
+    <div className="space-y-4">
+      <div className="flex gap-2">
+        <label className="cursor-pointer">
+          <input type="file" accept=".txt,.docx" onChange={handleFileUpload} className="hidden" />
+          <Button variant="outline" asChild>
+            <span>
+              <Upload className="h-4 w-4 mr-2" />
+              Upload File
+            </span>
           </Button>
-        </div>
-
-        <Textarea
-          placeholder="Paste your resume text here..."
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          rows={12}
-          className="font-mono text-sm"
-        />
-
-        {error && <p className="text-sm text-destructive">{error}</p>}
-
-        <Button onClick={handleParse} disabled={isLoading} className="w-full">
-          {isLoading ? (
-            <>
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-              Parsing...
-            </>
-          ) : (
-            "Parse Resume"
-          )}
+        </label>
+        <Button variant="ghost" onClick={loadExample}>
+          Load Example
         </Button>
-      </CardContent>
-    </Card>
+      </div>
+
+      <Textarea
+        placeholder="Paste your resume text here..."
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        rows={12}
+        className="font-mono text-sm"
+      />
+
+      {error && <p className="text-sm text-destructive">{error}</p>}
+
+      <Button onClick={handleParse} disabled={isLoading} className="w-full">
+        {isLoading ? (
+          <>
+            <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+            Parsing...
+          </>
+        ) : (
+          "Parse Resume"
+        )}
+      </Button>
+    </div>
   )
 }
