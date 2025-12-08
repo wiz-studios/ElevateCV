@@ -86,7 +86,7 @@ export default function ResumeBuildPage() {
   const displayResume = tailoredResume || resume
 
   return (
-    <div className="min-h-screen bg-background overflow-x-hidden">
+    <div className="min-h-screen bg-background">
       {/* Header */}
       <header className="sticky top-0 z-50 w-full border-b bg-background/80 backdrop-blur-md">
         <div className="container mx-auto px-3 sm:px-4 h-14 sm:h-16 flex items-center justify-between gap-2">
@@ -123,7 +123,7 @@ export default function ResumeBuildPage() {
         </div>
       </header>
 
-      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 space-y-4 sm:space-y-6 md:space-y-8 overflow-x-hidden">
+      <main className="container mx-auto px-3 sm:px-4 py-4 sm:py-6 md:py-8 space-y-4 sm:space-y-6 md:space-y-8">
         <div className="grid lg:grid-cols-12 gap-4 sm:gap-6 md:gap-8 items-start">
           {/* Left Column: Builder Controls (5 cols) */}
           <div className="lg:col-span-5 space-y-3 sm:space-y-4 md:space-y-6">
