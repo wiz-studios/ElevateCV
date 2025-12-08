@@ -28,6 +28,9 @@ export function Navbar() {
           <Link href="/" className="transition-colors hover:text-foreground/80 text-foreground/60">
             Builder
           </Link>
+          <Link href="/how-it-works" className="transition-colors hover:text-foreground/80 text-foreground/60">
+            How It Works
+          </Link>
           <Link href="/pricing" className="transition-colors hover:text-foreground/80 text-foreground/60">
             Pricing
           </Link>
@@ -80,6 +83,13 @@ export function Navbar() {
               onClick={() => setMobileMenuOpen(false)}
             >
               Builder
+            </Link>
+            <Link
+              href="/how-it-works"
+              className="block py-2 text-sm font-medium text-foreground/60 hover:text-foreground"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              How It Works
             </Link>
             <Link
               href="/pricing"

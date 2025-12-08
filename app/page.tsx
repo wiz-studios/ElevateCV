@@ -5,7 +5,6 @@ export const dynamic = 'force-dynamic'
 import { useState, useEffect } from "react"
 import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
-import { UserMenu } from "@/components/auth/user-menu"
 import { ResumeUpload } from "@/components/resume-builder/resume-upload"
 import { JobInput } from "@/components/resume-builder/job-input"
 import { TailorControls } from "@/components/resume-builder/tailor-controls"
@@ -101,12 +100,6 @@ export default function ResumeBuildPage() {
           </Link>
 
           <div className="flex items-center gap-1.5 sm:gap-4">
-            <Link href="/how-it-works" className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors">
-              How It Works
-            </Link>
-            <Link href="/pricing" className="hidden md:block text-sm text-muted-foreground hover:text-foreground transition-colors">
-              Pricing
-            </Link>
             {isAuthenticated && (
               <>
                 <div className="hidden lg:block">
@@ -126,7 +119,6 @@ export default function ResumeBuildPage() {
                 )}
               </>
             )}
-            <UserMenu />
           </div>
         </div>
       </header>

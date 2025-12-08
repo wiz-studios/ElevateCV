@@ -33,22 +33,19 @@ export function UsageDisplay({ onUpgradeClick, compact = false }: UsageDisplayPr
 
   if (compact) {
     return (
-      <div className="flex items-center gap-2">
-        <Badge
-          variant={billing.plan === "premium" ? "default" : "secondary"}
-          className={billing.plan === "premium" ? "bg-amber-500 hover:bg-amber-600" : ""}
-        >
-          {billing.plan === "premium" && <Crown className="h-3 w-3 mr-1" />}
-          {billing.plan_name}
-        </Badge>
-        {!isUnlimited && <span className="text-sm text-muted-foreground">{remaining} tailors left</span>}
+      <Badge
+        variant={billing.plan === "premium" || billing.plan === "enterprise" ? "default" : "secondary"}
+        className={billing.plan === "premium" || billing.plan === "enterprise" ? "bg-amber-500 hover:bg-amber-600" : ""}
+      >
+        {(billing.plan === "premium" || billing.plan === "enterprise") && <Crown className="h-3 w-3 mr-1" />}
+        {billing.plan_name}
         {billing.credits_remaining > 0 && (
-          <Badge variant="outline" className="text-xs">
-            <Zap className="h-3 w-3 mr-1" />
-            {billing.credits_remaining} credits
-          </Badge>
+          <span className="ml-1.5 flex items-center">
+            <Zap className="h-3 w-3 mx-1" />
+            {billing.credits_remaining}
+          </span>
         )}
-      </div>
+      </Badge>
     )
   }
 
