@@ -65,17 +65,17 @@ export function ResumeUpload({ onParsed }: ResumeUploadProps) {
 
   return (
     <div className="space-y-4">
-      <div className="flex gap-2">
+      <div className="flex flex-wrap gap-2">
         <label className="cursor-pointer">
           <input type="file" accept=".txt,.docx" onChange={handleFileUpload} className="hidden" />
-          <Button variant="outline" asChild>
+          <Button variant="outline" asChild size="sm" className="h-9">
             <span>
               <Upload className="h-4 w-4 mr-2" />
               Upload File
             </span>
           </Button>
         </label>
-        <Button variant="ghost" onClick={loadExample}>
+        <Button variant="ghost" onClick={loadExample} size="sm" className="h-9">
           Load Example
         </Button>
       </div>
@@ -85,7 +85,7 @@ export function ResumeUpload({ onParsed }: ResumeUploadProps) {
         value={text}
         onChange={(e) => setText(e.target.value)}
         rows={12}
-        className="font-mono text-sm"
+        className="font-mono text-sm w-full resize-none"
       />
 
       {error && <p className="text-sm text-destructive">{error}</p>}

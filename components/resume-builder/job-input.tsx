@@ -60,7 +60,7 @@ export function JobInput({ onParsed }: JobInputProps) {
         value={text}
         onChange={(e) => setText(e.target.value)}
         rows={12}
-        className="font-mono text-sm"
+        className="font-mono text-sm w-full resize-none"
       />
 
       {error && <p className="text-sm text-destructive">{error}</p>}
